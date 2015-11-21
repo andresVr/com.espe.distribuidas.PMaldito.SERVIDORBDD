@@ -10,9 +10,11 @@ package com.espe.distribuidas.pmaldito.servidorbdd.operaciones;
  * @author Andrés
  */
 public class Vocabulario {
-    
-    public static String SALTO_LINEA="\n";
-    public static String SEPARADOR_PIPE="|";
-    public static String TABULADOR_ESPACIO="\t";
 
+    public static String SALTO_LINEA = "\n";
+    public static String SEPARADOR_PIPE = "|";
+    public static String TABULADOR_ESPACIO = "\t";
+    public static String FACTURA_CLIENTE = "FACTURAPORCLIENTE";
+    public static String FACTURA_CODIGO = "FACTURAPORCODIGO";
+    
 }

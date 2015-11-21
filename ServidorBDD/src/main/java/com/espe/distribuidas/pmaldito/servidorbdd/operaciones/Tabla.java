@@ -32,19 +32,32 @@ public class Tabla {
     public void setListaCampos(ArrayList<String> listaCampos) {
         this.listaCampos = listaCampos;
     }
-
+/**
+ * Obtiene la lista de todos los registros de una tabla
+ * @return 
+ */
     public ArrayList<String> getListaRegistros() {
         return listaRegistros;
     }
-
+/**
+ * Permite setear todos los registros de una tabla, cada campo del registro ocupa un espacio diferente en la lista
+ * @param listaRegistros 
+ */
     public void setListaRegistros(ArrayList<String> listaRegistros) {
         this.listaRegistros = listaRegistros;
     }
-
+/**
+ * Permite obtener la lista de los campos de un registro especifico
+ * @return 
+ */
     public ArrayList<String> getListaRegistrosCampo() {
         return listaRegistrosCampo;
     }
-
+/**
+ * En esta lista se setean todos los campos referentes a un registro
+ * @param listaRegistrosCampo 
+ */
+    
     public void setListaRegistrosCampo(ArrayList<String> listaRegistrosCampo) {
         this.listaRegistrosCampo = listaRegistrosCampo;
     }
