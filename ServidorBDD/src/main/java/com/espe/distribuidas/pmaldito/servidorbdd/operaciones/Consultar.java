@@ -97,7 +97,7 @@ public class Consultar {
     }
 
     /**
-     * Trae todos los registro de una tabla
+     * Trae todos los registro de una tabla consulta *
      *
      * @param campos
      * @param tabla
@@ -115,7 +115,7 @@ public class Consultar {
 //consulta  todos
 
     /**
-     * lista de los campos de una consulta
+     * lista de los campos de una consulta que retorne todos los registros "/"
      *
      * @param campos
      * @param tabla

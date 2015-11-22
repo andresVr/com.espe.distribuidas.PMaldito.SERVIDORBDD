@@ -110,7 +110,7 @@ public class Archivo {
     }
 
     /**
-     * permite dar el form
+     * permite dar el formato con |
      *
      * @param valosCampos
      * @return
