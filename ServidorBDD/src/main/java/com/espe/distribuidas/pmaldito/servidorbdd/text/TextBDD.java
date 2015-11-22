@@ -6,6 +6,7 @@
 package com.espe.distribuidas.pmaldito.servidorbdd.text;
 
 import com.espe.distribuidas.pmaldito.servidorbdd.operaciones.Archivo;
+import com.espe.distribuidas.pmaldito.servidorbdd.operaciones.Consultar;
 import java.io.File;
 
 /**
@@ -17,5 +18,7 @@ public class TextBDD {
         System.out.println(Archivo.existeTabla(Archivo.rutaTablaCliente));
         Archivo.insertar("\n", new File(Archivo.rutaTablaCliente) );
         Archivo.insertar("\n1234|coca-cola|20|2.50", new File(Archivo.rutaTablaProducto));
+        Consultar cp=new Consultar();
+        cp.campoRegular(Archivo.rutaTablaCliente, 1, "1726247958");
     }
 }

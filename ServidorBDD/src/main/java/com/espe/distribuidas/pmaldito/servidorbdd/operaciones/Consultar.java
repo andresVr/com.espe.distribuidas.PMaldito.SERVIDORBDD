@@ -73,16 +73,53 @@ public class Consultar {
         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         ArrayList<String> datosRegistro = new ArrayList<>();
         String string;
-        String registro[];
+
         try {
             FileReader fr = new FileReader(tabla);
             BufferedReader br = new BufferedReader(fr);
             while ((string = br.readLine()) != null) {
-                registro = StringUtils.splitPreserveAllTokens(string, "_");
+                if (string.length() > 0) {
+                    String registro[] = StringUtils.splitPreserveAllTokens(string, "|");
+                    if (registro[numColumna].equalsIgnoreCase(valorColumna)) {
+                        datosRegistro.addAll(Arrays.asList(registro));
+                        break;    
+                    }
+                } else {
+                    break;
+                }
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            System.err.println(e);
+        } catch (IOException e1) {
+            System.err.println(e1);
+        }
+        return datosRegistro;
+    }
+    /**
+     * Reconoce los campos regulares de la tabla detalle
+     * @param tabla
+     * @param numColumna
+     * @param valorColumna
+     * @return 
+     */
+ public ArrayList campoRegularFact(String tabla, Integer numColumna, String valorColumna) {
+        @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+        ArrayList<String> datosRegistro = new ArrayList<>();
+        String string;
+        
+        try {
+            FileReader fr = new FileReader(tabla);
+            BufferedReader br = new BufferedReader(fr);
+            while ((string = br.readLine()) != null) {
+                if(string.length()>0){
+                String registro[] = StringUtils.splitPreserveAllTokens(string, "|");
                 if (registro[numColumna].equalsIgnoreCase(valorColumna)) {
                     datosRegistro.addAll(Arrays.asList(registro));
-
-                }
+                //break;    
+                }}
+                else
+                    break;
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -127,7 +164,7 @@ public class Consultar {
         ArrayList<String> consulta;
         consulta = new ArrayList<>();
 
-        if (campos.equalsIgnoreCase("/")) {
+        if (campos.equals("/")) {
             consulta = campoRegular(tabla, numColumna, valorColumna);
         }
         return consulta;
@@ -136,17 +173,19 @@ public class Consultar {
 
     //validar campos
     /**
-     * metodo existe en recibe el codigo a buscar, la poscion en donde buscar y el nombre de la tabla
-     * permite saber si existe o no el registro en especial
+     * metodo existe en recibe el codigo a buscar, la poscion en donde buscar y
+     * el nombre de la tabla permite saber si existe o no el registro en
+     * especial
+     *
      * @param codigo
      * @param posicion
      * @param tabla
-     * @return 
+     * @return
      */
     @SuppressWarnings("ConvertToTryWithResources")
     public boolean exiteEn(String codigo, Integer posicion, String tabla) {
         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-        Boolean validador=false;
+        Boolean validador = false;
         String string;
         String registro[];
         try {
@@ -155,7 +194,7 @@ public class Consultar {
             while ((string = br.readLine()) != null) {
                 registro = StringUtils.splitPreserveAllTokens(string, "_");
                 if (registro[posicion].equalsIgnoreCase(codigo)) {
-                    validador=true;
+                    validador = true;
                 }
             }
             br.close();
@@ -166,16 +205,18 @@ public class Consultar {
         }
         return validador;
     }
+
     /**
      * Permite validar el user y el pass del login
+     *
      * @param usuario
      * @param pass
-     * @return 
+     * @return
      */
     @SuppressWarnings("ConvertToTryWithResources")
-    public boolean exiteEn(String usuario,String pass) {
+    public boolean exiteEn(String usuario, String pass) {
         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-        Boolean validador=false;
+        Boolean validador = false;
         String string;
         String registro[];
         try {
@@ -183,8 +224,8 @@ public class Consultar {
             BufferedReader br = new BufferedReader(fr);
             while ((string = br.readLine()) != null) {
                 registro = StringUtils.splitPreserveAllTokens(string, "|");
-                if (registro[0].equalsIgnoreCase(usuario)&&registro[1].equalsIgnoreCase(pass)) {
-                    validador=true;
+                if (registro[0].equalsIgnoreCase(usuario) && registro[1].equalsIgnoreCase(pass)) {
+                    validador = true;
                 }
             }
             br.close();

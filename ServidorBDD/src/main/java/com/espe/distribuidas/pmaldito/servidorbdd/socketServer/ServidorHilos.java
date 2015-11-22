@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 /**
  *
@@ -40,6 +41,7 @@ public class ServidorHilos extends Thread {
         try {
             salida.writeUTF(mensaje);
             salida.flush(); //flush salida a cliente
+            System.out.println(mensaje);
 
         } //Fin try
         catch (IOException ioException) {
@@ -68,6 +70,7 @@ public class ServidorHilos extends Thread {
         do { //procesa los mensajes enviados dsd el servidor
             try {//leer el mensaje y mostrarlo 
                 mensaje = entrada.readUTF(); //leer nuevo mensaje
+                System.out.println(mensaje);
                 switch (Archivo.obtenerId(mensaje)) {
                     case MensajeBDD.idMensajeAutenticacion: {
                         AutenticacionRS aurs = new AutenticacionRS();
@@ -139,9 +142,10 @@ public class ServidorHilos extends Thread {
                                 ConsultarRS crs = new ConsultarRS();
                                 crs.buildInput(mensaje);
                                 Consultar con = new Consultar();
-                                MensajeRS rscon=new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
+                                MensajeRS rscon=new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
                                 try{
-                                crs.buildOutput("OKO", con.camposConsulta(crs.getCamposTablaEspeciales(), crs.getNombreTabla(), 1, crs.getValorCodigoidentificadorColumna()), con.camposConsulta(crs.getCamposTablaEspeciales(), crs.getNombreTabla(), 1, crs.getValorCodigoidentificadorColumna()).size());
+                                    ArrayList lista=con.camposConsulta("/",Archivo.rutaTablaCliente,1,crs.getValorCodigoidentificadorColumna());
+                                crs.buildOutput("OKO",lista );
                                 rscon.setCuerpo(crs);
                                 this.enviar(rscon.asTexto());
                             } catch (Exception e) {

@@ -81,7 +81,7 @@ public class Archivo {
 
         try {
             FileWriter fw = new FileWriter(archivo, true);
-            fw.write(string + "\n");
+            fw.write("\n"+string );
             fw.close();
         } catch (IOException e) {
             System.err.println(e);
@@ -106,7 +106,7 @@ public class Archivo {
      */
     public static String tabla(String string) {
         String partes[] = StringUtils.splitPreserveAllTokens(string, "_");
-        return partes[1];
+        return StringUtils.stripEnd(partes[1], "0");
     }
 
     /**
