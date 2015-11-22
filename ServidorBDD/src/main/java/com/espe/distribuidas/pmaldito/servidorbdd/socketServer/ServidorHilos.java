@@ -142,20 +142,27 @@ public class ServidorHilos extends Thread {
                                 ConsultarRS crs = new ConsultarRS();
                                 crs.buildInput(mensaje);
                                 Consultar con = new Consultar();
-                                MensajeRS rscon=new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
-                                try{
-                                    ArrayList lista=con.camposConsulta("/",Archivo.rutaTablaCliente,1,crs.getValorCodigoidentificadorColumna());
-                                crs.buildOutput("OKO",lista );
-                                rscon.setCuerpo(crs);
-                                this.enviar(rscon.asTexto());
-                            } catch (Exception e) {
+                                MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
+                                try {
+                                    ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaCliente, 1, crs.getValorCodigoidentificadorColumna());
+                                    if(!lista.isEmpty()){
+                                    crs.buildOutput("OKO", lista);
+                                    rscon.setCuerpo(crs);
+                                    this.enviar(rscon.asTexto());}
+                                    else{
+                                    crs.buildOutput("BAD");
+                                    rscon.setCuerpo(crs);
+                                    this.enviar(rscon.asTexto());
+                                    
+                                    }
+                                } catch (Exception e) {
                                     crs.buildOutput("BAD");
                                     rscon.setCuerpo(crs);
                                     this.enviar(rscon.asTexto());
                                     System.out.println(e);
 
                                 }
-                                }
+                            }
                             break;
                         }
                     }
