@@ -16,6 +16,6 @@ public class TextBDD {
     public static void main(String[] args) {
         System.out.println(Archivo.existeTabla(Archivo.rutaTablaCliente));
         Archivo.insertar("\n", new File(Archivo.rutaTablaCliente) );
-     
+        Archivo.insertar("\n1234|coca-cola|20|2.50", new File(Archivo.rutaTablaProducto));
     }
 }

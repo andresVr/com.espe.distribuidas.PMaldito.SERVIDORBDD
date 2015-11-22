@@ -40,6 +40,7 @@ public class Server {
             System.out.println("Conecion Finalizada");
         }catch (Exception e)
         {
+            e.printStackTrace();
         }
     }
     
