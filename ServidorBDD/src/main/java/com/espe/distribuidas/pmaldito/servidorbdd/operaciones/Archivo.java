@@ -145,4 +145,5 @@ public class Archivo {
         }
         return detalleParse;
     }
+    
 }

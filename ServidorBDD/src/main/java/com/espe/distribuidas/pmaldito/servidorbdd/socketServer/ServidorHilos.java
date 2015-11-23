@@ -145,15 +145,15 @@ public class ServidorHilos extends Thread {
                                 MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
                                 try {
                                     ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaCliente, 1, crs.getValorCodigoidentificadorColumna());
-                                    if(!lista.isEmpty()){
-                                    crs.buildOutput("OKO", lista);
-                                    rscon.setCuerpo(crs);
-                                    this.enviar(rscon.asTexto());}
-                                    else{
-                                    crs.buildOutput("BAD");
-                                    rscon.setCuerpo(crs);
-                                    this.enviar(rscon.asTexto());
-                                    
+                                    if (!lista.isEmpty()) {
+                                        crs.buildOutput("OKO", lista);
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+                                    } else {
+                                        crs.buildOutput("BAD");
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+
                                     }
                                 } catch (Exception e) {
                                     crs.buildOutput("BAD");
@@ -162,6 +162,34 @@ public class ServidorHilos extends Thread {
                                     System.out.println(e);
 
                                 }
+                            }
+                            break;
+                            case Archivo.nombreTablaProducto: {
+                                ConsultarRS crs = new ConsultarRS();
+                                crs.buildInput(mensaje);
+                                Consultar con = new Consultar();
+                                System.out.println(crs.getValorCodigoidentificadorColumna());
+                                MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
+                                try {
+                                    ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaProducto, 0, crs.getValorCodigoidentificadorColumna());
+                                    if (!lista.isEmpty()) {
+                                        crs.buildOutput("OKO", lista);
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+                                    } else {
+                                        crs.buildOutput("BAD");
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+
+                                    }
+                                } catch (Exception e) {
+                                    crs.buildOutput("BAD");
+                                    rscon.setCuerpo(crs);
+                                    this.enviar(rscon.asTexto());
+                                    System.out.println(e);
+
+                                }
+
                             }
                             break;
                         }
