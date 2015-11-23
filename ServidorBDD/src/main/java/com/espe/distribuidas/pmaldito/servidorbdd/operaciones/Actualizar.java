@@ -24,7 +24,7 @@ public class Actualizar {
         this.campoTabla = campoTabla;
     }
     
-     public static void actualizar(String string, File archivo) {
+     public static void actualizarDatos(String string, File archivo) {
 
         try {
             FileWriter fw = new FileWriter(archivo,true);

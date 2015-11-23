@@ -96,7 +96,8 @@ public class ServidorHilos extends Thread {
                                 is.buildInput(mensaje);
                                 MensajeRS isrs = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
                                 try {
-                                    Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaCliente));
+                                   // Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaCliente));
+                                    Archivo.insertarTabla( Archivo.rutaTablaCliente, Archivo.parsearCampos(is.getValosCamposTabla()));
                                     is.buildOutput("OK");
                                     isrs.setCuerpo(is);
                                     this.enviar(isrs.asTexto());
@@ -114,10 +115,12 @@ public class ServidorHilos extends Thread {
                                 is.buildInput(mensaje);
                                 MensajeRS isfact = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
                                 try {
-                                    Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaFactura));
-                                    for (int i = 0; i < Archivo.detalle(is.getValosCamposTablaCuerpoFact()).size(); i++) {
-                                        Archivo.insertar(Archivo.detalle(is.getValosCamposTablaCuerpoFact()).get(i), new File(Archivo.rutaTabladDetalle));
-                                    }
+                                  //  Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaFactura));
+                                    Archivo.insertarTabla(Archivo.rutaTablaFactura, Archivo.parsearCampos(is.getValosCamposTabla()));
+                                    Archivo.insertarTabla(Archivo.rutaTabladDetalle, Archivo.detalle(is.getValosCamposTablaCuerpoFact()));
+//                                    for (int i = 0; i < Archivo.detalle(is.getValosCamposTablaCuerpoFact()).size(); i++) {
+//                                        Archivo.insertar(Archivo.detalle(is.getValosCamposTablaCuerpoFact()).get(i), new File(Archivo.rutaTabladDetalle));
+//                                    }
                                     is.buildOutput("OK");
                                     isfact.setCuerpo(is);
                                     this.enviar(isfact.asTexto());

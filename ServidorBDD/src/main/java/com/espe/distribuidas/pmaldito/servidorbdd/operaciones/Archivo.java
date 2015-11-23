@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -81,11 +82,22 @@ public class Archivo {
 
         try {
             FileWriter fw = new FileWriter(archivo, true);
-            fw.write("\n"+string );
+            fw.write(string + "\n");
             fw.close();
         } catch (IOException e) {
             System.err.println(e);
         }
+    }
+
+    public static void vaciarArchivo(File archivo) {
+        try {
+            FileWriter fw = new FileWriter(archivo);
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+
     }
 
     /**
@@ -122,7 +134,8 @@ public class Archivo {
         }
         return string.substring(1);
     }
-        public static String parsearCampos(List<String> valosCampos) {
+
+    public static String parsearCampos(List<String> valosCampos) {
         String string = "|";
         for (String valosCampo : valosCampos) {
             string = string + valosCampo + "|";
@@ -138,12 +151,65 @@ public class Archivo {
      */
     public static ArrayList<String> detalle(ArrayList<String> valosCampos) {
         int contador = 0;
-        ArrayList<String>detalleParse=new ArrayList<>();
+        ArrayList<String> detalleParse = new ArrayList<>();
         while (contador < valosCampos.size()) {
-            detalleParse.add(parsearCampos(valosCampos.subList(contador,contador+4)));
-            contador=contador+5;
+            detalleParse.add(parsearCampos(valosCampos.subList(contador, contador + 4)));
+            contador = contador + 5;
         }
         return detalleParse;
     }
-    
+
+    /**
+     * Permite enviar la nueva lista de registros
+     *
+     * @param campos
+     * @param archivo
+     */
+    public static void insetarCampos(ArrayList<String> campos, File archivo) {
+        for (int i = 0; i < campos.size(); i++) {
+            insertar(campos.get(i), archivo);
+        }
+    }
+
+    /**
+     * inserta un nuevo dato dentro de la lista de la tabla
+     *
+     * @param tabla
+     * @param nuevo
+     * @return
+     */
+    public static ArrayList<String> insertarNuevo(ArrayList<String> tabla, String nuevo) {
+        tabla.add(nuevo);
+        return tabla;
+    }
+
+    public static ArrayList<String> insertarNuevo(ArrayList<String> tabla, ArrayList<String> nuevo) {
+        for (String nuevo1 : nuevo) {
+            tabla.add(nuevo1);
+        }
+        return tabla;
+    }
+
+    /**
+     * metodo principal de insercion llamado para insertar cmapos nuevos en una
+     * tabla
+     *
+     * @param rutaTabla
+     * @param nuevoCampos
+     */
+    public static void insertarTabla(String rutaTabla, String nuevoCampos) {
+        ArrayList<String> campos;
+        Consultar co = new Consultar();
+        campos = insertarNuevo(co.regresarCampos(rutaTabla), nuevoCampos);
+        vaciarArchivo(new File(rutaTabla));
+        insetarCampos(campos, new File(rutaTabla));
+    }
+
+    public static void insertarTabla(String rutaTabla, ArrayList<String> nuevoCampos) {
+        ArrayList<String> campos;
+        Consultar co = new Consultar();
+        campos = insertarNuevo(co.regresarCampos(rutaTabla), nuevoCampos);
+        vaciarArchivo(new File(rutaTabla));
+        insetarCampos(campos, new File(rutaTabla));
+    }
 }
