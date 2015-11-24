@@ -97,6 +97,7 @@ public class ServidorHilos extends Thread {
                                 MensajeRS isrs = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
                                 try {
                                    // Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaCliente));
+                                    
                                     Archivo.insertarTabla( Archivo.rutaTablaCliente, Archivo.parsearCampos(is.getValosCamposTabla()));
                                     is.buildOutput("OK");
                                     isrs.setCuerpo(is);
@@ -114,6 +115,7 @@ public class ServidorHilos extends Thread {
                                 InsertarRS is = new InsertarRS();
                                 is.buildInput(mensaje);
                                 MensajeRS isfact = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
+                                System.out.println(Archivo.detalle(is.getValosCamposTablaCuerpoFact()));
                                 try {
                                   //  Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaFactura));
                                     Archivo.insertarTabla(Archivo.rutaTablaFactura, Archivo.parsearCampos(is.getValosCamposTabla()));
@@ -195,6 +197,33 @@ public class ServidorHilos extends Thread {
 
                             }
                             break;
+                            case Archivo.nombreTablaFactura:{
+                                ConsultarRS crs = new ConsultarRS();
+                                crs.buildInput(mensaje);
+                                Consultar con = new Consultar();
+                                System.out.println(crs.getValorCodigoidentificadorColumna());
+                                MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
+                                try {
+                                    ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaProducto, 0, crs.getValorCodigoidentificadorColumna());
+                                    if (!lista.isEmpty()) {
+                                        crs.buildOutput("OKO", lista);
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+                                    } else {
+                                        crs.buildOutput("BAD");
+                                        rscon.setCuerpo(crs);
+                                        this.enviar(rscon.asTexto());
+
+                                    }
+                                } catch (Exception e) {
+                                    crs.buildOutput("BAD");
+                                    rscon.setCuerpo(crs);
+                                    this.enviar(rscon.asTexto());
+                                    System.out.println(e);
+
+                                }
+                        
+                            }
                         }
                     }
                     break;

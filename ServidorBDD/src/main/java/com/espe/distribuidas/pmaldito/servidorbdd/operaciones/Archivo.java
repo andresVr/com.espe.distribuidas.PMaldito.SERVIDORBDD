@@ -153,7 +153,7 @@ public class Archivo {
         int contador = 0;
         ArrayList<String> detalleParse = new ArrayList<>();
         while (contador < valosCampos.size()) {
-            detalleParse.add(parsearCampos(valosCampos.subList(contador, contador + 4)));
+            detalleParse.add(parsearCampos(valosCampos.subList(contador, contador + 5)));
             contador = contador + 5;
         }
         return detalleParse;
