@@ -205,6 +205,12 @@ public class Archivo {
         insetarCampos(campos, new File(rutaTabla));
     }
 
+    /**
+     * metodo para llenado de campos en una tabla recibe una lista
+     *
+     * @param rutaTabla
+     * @param nuevoCampos
+     */
     public static void insertarTabla(String rutaTabla, ArrayList<String> nuevoCampos) {
         ArrayList<String> campos;
         Consultar co = new Consultar();
@@ -212,4 +218,6 @@ public class Archivo {
         vaciarArchivo(new File(rutaTabla));
         insetarCampos(campos, new File(rutaTabla));
     }
+
+
 }

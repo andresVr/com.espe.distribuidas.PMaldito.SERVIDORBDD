@@ -20,5 +20,7 @@ public class TextBDD {
         Archivo.insertar("\n1234|coca-cola|20|2.50", new File(Archivo.rutaTablaProducto));
         Consultar cp=new Consultar();
         cp.campoRegular(Archivo.rutaTablaProducto, 1, "1234");
+        Consultar con=new Consultar();
+        System.out.println(con.exiteEn("1726247958", 1,Archivo.rutaTablaCliente));
     }
 }

@@ -82,7 +82,7 @@ public class Consultar {
                     String registro[] = StringUtils.splitPreserveAllTokens(string, "|");
                     if (registro[numColumna].equalsIgnoreCase(valorColumna)) {
                         datosRegistro.addAll(Arrays.asList(registro));
-                        break;    
+                        break;
                     }
                 } else {
                     break;
@@ -96,30 +96,33 @@ public class Consultar {
         }
         return datosRegistro;
     }
+
     /**
      * Reconoce los campos regulares de la tabla detalle
+     *
      * @param tabla
      * @param numColumna
      * @param valorColumna
-     * @return 
+     * @return
      */
- public ArrayList campoRegularFact(String tabla, Integer numColumna, String valorColumna) {
+    public ArrayList campoRegularFact(String tabla, Integer numColumna, String valorColumna) {
         @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
         ArrayList<String> datosRegistro = new ArrayList<>();
         String string;
-        
+
         try {
             FileReader fr = new FileReader(tabla);
             BufferedReader br = new BufferedReader(fr);
             while ((string = br.readLine()) != null) {
-                if(string.length()>0){
-                String registro[] = StringUtils.splitPreserveAllTokens(string, "|");
-                if (registro[numColumna].equalsIgnoreCase(valorColumna)) {
-                    datosRegistro.addAll(Arrays.asList(registro));
-                //break;    
-                }}
-                else
+                if (string.length() > 0) {
+                    String registro[] = StringUtils.splitPreserveAllTokens(string, "|");
+                    if (registro[numColumna].equalsIgnoreCase(valorColumna)) {
+                        datosRegistro.addAll(Arrays.asList(registro));
+                        //break;    
+                    }
+                } else {
                     break;
+                }
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -165,7 +168,7 @@ public class Consultar {
         consulta = new ArrayList<>();
 
         if (campos.equals("/")) {
-            consulta = campoRegular(tabla, numColumna, valorColumna);
+            consulta = campoRegularFact(tabla, numColumna, valorColumna);
         }
         return consulta;
 
@@ -191,10 +194,16 @@ public class Consultar {
         try {
             FileReader fr = new FileReader(tabla);
             BufferedReader br = new BufferedReader(fr);
+
             while ((string = br.readLine()) != null) {
-                registro = StringUtils.splitPreserveAllTokens(string, "_");
-                if (registro[posicion].equalsIgnoreCase(codigo)) {
-                    validador = true;
+                if (string.length() > 0) {
+                    registro = StringUtils.splitPreserveAllTokens(string, "|");
+                    System.out.println(registro.length);
+                    if (registro[posicion].equalsIgnoreCase(codigo)) {
+                        validador = true;
+                    }
+                } else {
+                    break;
                 }
             }
             br.close();
@@ -223,9 +232,13 @@ public class Consultar {
             FileReader fr = new FileReader(Archivo.rutaTablaUsuario);
             BufferedReader br = new BufferedReader(fr);
             while ((string = br.readLine()) != null) {
-                registro = StringUtils.splitPreserveAllTokens(string, "|");
-                if (registro[0].equalsIgnoreCase(usuario) && registro[1].equalsIgnoreCase(pass)) {
-                    validador = true;
+                if (string.length() > 0) {
+                    registro = StringUtils.splitPreserveAllTokens(string, "|");
+                    if (registro[0].equalsIgnoreCase(usuario) && registro[1].equalsIgnoreCase(pass)) {
+                        validador = true;
+                    }
+                } else {
+                    break;
                 }
             }
             br.close();
@@ -266,4 +279,51 @@ public class Consultar {
         return consulta;
     }
 
+    /**
+     * permite retirar 1 campo de una lista
+     *
+     * @param entrada
+     * @param campos
+     * @return
+     */
+    public static ArrayList<String> retirarCampos(ArrayList<String> entrada, Integer campos) {
+        entrada.remove(campos);
+        return entrada;
+    }
+
+    /**
+     * permite retirar n campos de una lista
+     *
+     * @param entrada
+     * @param campos
+     * @return
+     */
+    public static ArrayList<String> retirarCampos(ArrayList<String> entrada, Integer campos[]) {
+        for (Integer campo : campos) {
+            entrada.remove(campo);
+        }
+        return entrada;
+    }
+
+    /**
+     * permite unir listas para concatenacion
+     *
+     * @param lista1
+     * @param lista2
+     * @param lista3
+     * @return
+     */
+    public static ArrayList<String> unirListas(ArrayList<String> lista1, ArrayList<String> lista2, ArrayList<String> lista3) {
+        ArrayList<String> resultante = new ArrayList<>();
+        for (String lista11 : lista1) {
+            resultante.add(lista11);
+        }
+        for (String lista22 : lista2) {
+            resultante.add(lista22);
+        }
+        for (String lista33 : lista3) {
+            resultante.add(lista33);
+        }
+        return resultante;
+    }
 }

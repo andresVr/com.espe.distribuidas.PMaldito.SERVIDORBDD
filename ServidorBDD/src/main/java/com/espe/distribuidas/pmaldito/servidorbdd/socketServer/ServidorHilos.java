@@ -92,21 +92,30 @@ public class ServidorHilos extends Thread {
                     case MensajeBDD.idMensajeInsertar: {
                         switch (Archivo.tabla(mensaje)) {
                             case Archivo.nombreTablaCliente: {
+                                Consultar consultaRepetido = new Consultar();
                                 InsertarRS is = new InsertarRS();
                                 is.buildInput(mensaje);
                                 MensajeRS isrs = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
-                                try {
-                                   // Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaCliente));
-                                    
-                                    Archivo.insertarTabla( Archivo.rutaTablaCliente, Archivo.parsearCampos(is.getValosCamposTabla()));
-                                    is.buildOutput("OK");
-                                    isrs.setCuerpo(is);
-                                    this.enviar(isrs.asTexto());
-                                } catch (Exception e) {
+                                System.out.println(is.getValosCamposTabla().get(1));
+                                if (!consultaRepetido.exiteEn(is.getValosCamposTabla().get(1), 1, Archivo.rutaTablaCliente)) {
+                                    try {
+                                        // Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaCliente));
+
+                                        Archivo.insertarTabla(Archivo.rutaTablaCliente, Archivo.parsearCampos(is.getValosCamposTabla()));
+                                        is.buildOutput("OK");
+                                        isrs.setCuerpo(is);
+                                        this.enviar(isrs.asTexto());
+                                    } catch (Exception e) {
+                                        is.buildOutput("NO");
+                                        isrs.setCuerpo(is);
+                                        this.enviar(isrs.asTexto());
+                                        System.out.println(e);
+
+                                    }
+                                } else {
                                     is.buildOutput("NO");
                                     isrs.setCuerpo(is);
                                     this.enviar(isrs.asTexto());
-                                    System.out.println(e);
 
                                 }
                             }
@@ -117,7 +126,7 @@ public class ServidorHilos extends Thread {
                                 MensajeRS isfact = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeInsertar);
                                 System.out.println(Archivo.detalle(is.getValosCamposTablaCuerpoFact()));
                                 try {
-                                  //  Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaFactura));
+                                    //  Archivo.insertar(Archivo.parsearCampos(is.getValosCamposTabla()), new File(Archivo.rutaTablaFactura));
                                     Archivo.insertarTabla(Archivo.rutaTablaFactura, Archivo.parsearCampos(is.getValosCamposTabla()));
                                     Archivo.insertarTabla(Archivo.rutaTabladDetalle, Archivo.detalle(is.getValosCamposTablaCuerpoFact()));
 //                                    for (int i = 0; i < Archivo.detalle(is.getValosCamposTablaCuerpoFact()).size(); i++) {
@@ -174,6 +183,7 @@ public class ServidorHilos extends Thread {
                                 crs.buildInput(mensaje);
                                 Consultar con = new Consultar();
                                 System.out.println(crs.getValorCodigoidentificadorColumna());
+                                System.out.println(crs.getValorCodigoidentificadorColumna().length());
                                 MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
                                 try {
                                     ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaProducto, 0, crs.getValorCodigoidentificadorColumna());
@@ -197,16 +207,27 @@ public class ServidorHilos extends Thread {
 
                             }
                             break;
-                            case Archivo.nombreTablaFactura:{
+                            case Archivo.nombreTablaFactura: {
                                 ConsultarRS crs = new ConsultarRS();
                                 crs.buildInput(mensaje);
                                 Consultar con = new Consultar();
                                 System.out.println(crs.getValorCodigoidentificadorColumna());
                                 MensajeRS rscon = new MensajeRS(Originador.getOriginador(Originador.BASE_DATOS), MensajeBDD.idMensajeConsultar);
                                 try {
-                                    ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaProducto, 0, crs.getValorCodigoidentificadorColumna());
+                                    //recupera fatura
+                                    ArrayList lista = con.camposConsulta("/", Archivo.rutaTablaFactura, 0, crs.getValorCodigoidentificadorColumna());
+                                    System.out.println(lista.get(1).toString());
+                                    System.out.println(lista.get(1).toString().length());
+                                    ArrayList cabecera = con.camposConsulta("/", Archivo.rutaTablaCliente, 1, lista.get(1).toString());
+                                    System.out.println(cabecera);
+                                    ArrayList cuerpo = con.camposConsulta("/", Archivo.rutaTabladDetalle, 1, lista.get(0).toString());
+                                    System.out.println(cuerpo);
+                                    Consultar.retirarCampos(lista, 1);
+                                    Integer retirar[] = {0, 8};
+                                    Consultar.retirarCampos(cabecera, retirar);
+                                    Consultar.retirarCampos(cuerpo, 1);
                                     if (!lista.isEmpty()) {
-                                        crs.buildOutput("OKO", lista);
+                                        crs.buildOutput("OKO", Consultar.unirListas(lista, cabecera, cuerpo));
                                         rscon.setCuerpo(crs);
                                         this.enviar(rscon.asTexto());
                                     } else {
@@ -222,7 +243,7 @@ public class ServidorHilos extends Thread {
                                     System.out.println(e);
 
                                 }
-                        
+
                             }
                         }
                     }
